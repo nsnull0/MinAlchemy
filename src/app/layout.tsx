@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { cookieToInitialState } from "wagmi";
+import { configWagmiCustom } from "@/config";
+import { headers } from "next/headers";
+import Web3ModalProvider from "./context";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,9 +18,18 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const initialState = cookieToInitialState(configWagmiCustom, headers().get('cookie'))
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <title>
+        Alchemy - Test Smart Account
+      </title>
+      <meta name="Alchemy" content="Minimum Smart Account" />
+      <body >
+        <Web3ModalProvider initialState={initialState}>
+          {children}
+        </Web3ModalProvider>
+      </body>
     </html>
-  );
+  )
 }
